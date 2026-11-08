@@ -1,6 +1,19 @@
 # Model Card · Territorial Review DSS (sintético) · regresión logística del curso
 
-> Completada en U04.E07 (LAB11–LAB12). LAB13 añadirá gobernanza operativa y la aplicación.
+> Completada en U04.E07 (LAB11–LAB12) y ampliada en U04.E08 (LAB13) con versiones, monitoreo y
+> simulacro. Datasheet: `docs/DATASHEET.md`.
+
+## Versions and traceability
+| Elemento | Versión / SHA-256 |
+|---|---|
+| Política | `u04-e08-1.0` (`configs/governance.yml`, `b9f59e1a999eca2ca28212b1f9b6a3bbc01af104469608c9cd9315a0b462f3ea`) |
+| Datos | `2af1858fe874f3914b0f9bfe068fd876cb716186694a6ece9a16e8c929128a01` |
+| Modelo v1.0 | `models/model.joblib`, `2b33ffa636a5e025b6931403dcadc8013b2ecf1d4e24b3e133b4c3580eae5f42` (reproducible con `uv.lock`; el archivo no se versiona en Git) |
+| Código | etiqueta `u04-lab13` |
+| Decisión | `reports/lab13/deployment_decision.json`: puerta técnica **GO** → decisión gobernada **LIMITAR** |
+
+Cada decisión lleva el manifiesto `trace_manifest()` con estas versiones, más el commit y la hora.
+`tests/test_e08.py` falla si los datos o la política cambian sin actualizar esta ficha.
 
 ## Intended use
 Sugerir el **orden de revisión humana** de casos territoriales sintéticos. Es apoyo a la decisión: un
@@ -52,7 +65,20 @@ Se elige la opción suficiente.
 * Apelación ante un revisor distinto en 5 días hábiles.
 * Condición de retiro definida en el registro de decisión.
 
+## Monitoring and incident drill (U04.E08)
+* **Monitoreo:** cada 15 días, contrato de calidad por zona y PSI, sin necesidad de etiquetas.
+  Cada mes, recall y brechas por grupo, sólo con 100 casos o más (`docs/RUNBOOK.md`).
+* **Simulacro INC-2026-12-01:** la ingesta v2 de Norte y Sur convirtió el historial ausente en 0.
+  * **Impacto:** el recall de G1 bajó de 0.667 a 0.278 en los mismos 46 casos de diciembre, y el
+    78 % de los casos afectados era de G1.
+  * **Detección:** el contrato de calidad lo detectó en el primer corte quincenal (SEV-1 → STOP de
+    segmento).
+  * **Rollback:** se revirtió la ingesta y se verificó REVIEW, porque con 46 casos no puede
+    declararse GO. El modelo no cambió (mismo hash).
+* **Nueva limitación:** el modelo y la regla de respaldo dependen de `previous_incidents`. Un
+  defecto en esa variable afecta a ambos, así que el estado seguro es la cola manual.
+
 ## Owner and review date
 Institutional Owner (A) y Data Scientist (R de validación del modelo). Expediente preparado por
 Melvin H. Rivas Genao el 8 de noviembre de 2026. La próxima revisión es al cerrar la primera ventana
-mensual del piloto.
+mensual del piloto con 100 casos o más, o antes si cualquier cambio de datos o de política altera los hashes.
