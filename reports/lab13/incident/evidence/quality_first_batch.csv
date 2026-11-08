@@ -1,0 +1,5 @@
+zone,ref_zero_share,cur_zero_share,n,delta,nivel
+Este,0.031,0.0,7,-0.031,OK
+Norte,0.1121,1.0,10,0.8879,ALERTA
+Oeste,0.0517,0.0,7,-0.0517,OK
+Sur,0.0504,1.0,4,0.9496,SIN SOPORTE

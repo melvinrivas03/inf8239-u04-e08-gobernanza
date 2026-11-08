@@ -1,72 +1,67 @@
-# U04.E07 · Evaluación de impacto y auditoría de equidad
+# U04.E08 · Expediente de gobernanza y simulacro
 
 **INF-8239 Ciencia de Datos II** · Unidad 04 · Ética y roles en Ciencia de Datos
 Estudiante: Melvin H. Rivas Genao · Matrícula 100279298 · Docente: Edwin Ramón José Nolasco
 
-Expediente que integra LAB11 (evaluación de impacto ético) y LAB12 (auditoría de equidad con
-Fairlearn) sobre el proyecto base del curso `INF8239_U04_Gobernanza_DSS_Proyecto_Base_uv`.
-El sistema es un DSS sintético que **sugiere el orden de revisión humana** de casos territoriales.
-Los datos son sintéticos y didácticos, y el sistema no autoriza decisiones automáticas sobre personas.
+Este expediente integra **LAB13** (DSS gobernado: inventario, Datasheet y Model Card, RACI, monitoreo,
+runbook y simulacro) sobre el mismo sistema de U04.E07. El historial de Git conserva LAB11, LAB12 y
+E07.
 
-## Decisión: **LIMITAR**
+El sistema es un DSS sintético que **sugiere el orden de revisión humana** de casos territoriales. Los
+datos son sintéticos y didácticos, y el sistema no autoriza decisiones automáticas.
 
-Piloto acotado con la regresión logística del curso, sólo como orden sugerido. Todos los casos se
-revisan, no se usa el grupo protegido al decidir, hay apelación, monitoreo mensual de brechas con IC
-y condición de retiro. Detalle en [`reports/lab11/DECISION_RECORD.md`](reports/lab11/DECISION_RECORD.md).
+## Decisión final: **LIMITAR** (se mantiene)
 
-| Candidato (prueba, 160 casos) | Recall | Brecha recall [IC 95 %] | Brecha FPR [IC 95 %] | Puertas del curso | Con IC superior |
-|---|---|---|---|---|---|
-| **Logística (baseline)** | 0.717 | 0.138 [0.010, 0.318] | 0.125 [0.006, 0.398] | ✔ | ✘ |
-| Árbol | 0.717 | 0.181 | 0.168 | ✘ | ✘ |
-| Logística sin `zone` | 0.707 | 0.114 | 0.327 | ✘ | ✘ |
-| Regla transparente (no predictiva) | 0.837 | 0.131 | 0.106 | ✔ | ✘ |
-| Logística, umbral 0.56 (validación) | 0.696 | 0.135 | 0.077 | ✔ | ✘ |
-| ExponentiatedGradient | 0.772 | 0.079 | 0.212 | ✘ | ✘ |
-| ThresholdOptimizer (usa el grupo al decidir) | 0.804 | 0.069 | 0.168 | ✘ | ✘ (excluido) |
+| Capa | Resultado | Fuente |
+|---|---|---|
+| Puerta técnica del curso | **GO**: recall 0.717; brechas de recall 0.138 y de FPR 0.125; 3.6 KB; menos de 1 ms | `reports/lab13/deployment_decision.json` |
+| Incertidumbre (E07) | El IC 95 % de las brechas llega a 0.32 y 0.40 | `reports/e07/bootstrap_gaps_baseline.csv` |
+| Simulacro | Un defecto de datos en dos zonas dejó el recall de G1 en 0.278; STOP de segmento y rollback | `reports/lab13/INCIDENT_POSTMORTEM.md` |
+| **Decisión gobernada** | **LIMITAR**: un GO técnico no amplía la autoridad del sistema | `governed_recommendation` |
 
-Fuente: `reports/e07/candidates.csv` y `gates.csv`. Las puertas son las de `configs/governance.yml`:
-recall ≥ 0.68 y brechas ≤ 0.16. Valores elegidos por el estudiante: daño prioritario = falso
-negativo; métrica principal = brecha de recall; tolerancia = 0.16 con monitoreo del IC.
+LIMITAR significa un piloto en el que el sistema sólo ordena. Todos los casos los revisa una persona,
+que registra su acción. Hay apelación en 5 días hábiles y una muestra aleatoria del 5 % de los casos
+de baja prioridad. El monitoreo es quincenal sin etiquetas y mensual con etiquetas, y existe una
+condición de retiro.
+
+No se elige DESPLEGAR porque los IC son amplios, las ventanas son pequeñas y el sistema depende de
+una sola variable frágil. Tampoco NO UTILIZAR, porque el riesgo es controlable con supervisión humana
+y la cola manual es un estado seguro probado.
 
 ## Inicio rápido
 
 ```bash
 uv sync --frozen
-uv run pytest -q                                   # 24 pruebas (10 del curso + 14 del expediente)
-uv run python scripts/check_environment.py
-uv run python scripts/lab11_impact.py              # LAB11: valida insumos y puntúa riesgos
-uv run python scripts/lab12_audit.py --model logistic
-uv run python scripts/lab12_audit.py --model tree
-uv run python scripts/validate_lab12_decision.py
-uv run python scripts/e07_audit.py                 # E07: IC, interseccionalidad, mitigación, puertas, NIST
+uv run pytest -q                              # 49 pruebas (10 curso + 14 E07 + 25 E08)
+uv run python scripts/lab13_governance.py     # decisión trazable + TRACE_MANIFEST.json
+uv run python scripts/simulate_incident.py    # simulacro, evidencia con hashes y postmortem
+uv run streamlit run app.py                   # aplicación (AppTest en tests/test_app.py)
 ```
 
-## Artefactos editables
+## Mapa de la rúbrica
 
-| Requisito | Archivo |
-|---|---|
-| Finalidad, usuarios, afectados, alternativa no predictiva, uso prohibido, retiro y apelación | `student_inputs/lab11_impact.yml` |
-| Interesados: beneficio, daño, poder y participación | `student_inputs/stakeholders.csv` |
-| Registro de 11 riesgos con control, responsable, evidencia, residual, función NIST y tipo de norma | `student_inputs/risk_register.csv` |
-| RACI | `student_inputs/raci.csv` |
-| Decisión LAB12: daño, métrica, tolerancia, evidencia, limitación y recomendación | `student_inputs/lab12_decision.yml` |
-| Obligación legal, marco voluntario y recomendación ética | `docs/NORMATIVE_MATRIX.csv` |
-| Registro de decisión | `reports/lab11/DECISION_RECORD.md` |
-| Model Card, Dataset Card y declaración de IA | `docs/` |
-| Evidencia generada | `reports/lab11/`, `reports/lab12/{logistic,tree}/`, `reports/e07/` |
+| Criterio | Artefactos editables | Pruebas |
+|---|---|---|
+| Inventario, minimización y retención | `docs/DATA_INVENTORY.csv` (14 elementos) y `configs/governance.yml` (`retention`) | `test_inventory_*`, `test_every_row_has_purpose_retention_and_norm_type` |
+| Datasheet y Model Card trazables | `docs/DATASHEET.md` (Gebru et al.), `docs/MODEL_CARD.md` (hashes de datos, política y modelo) y `reports/lab13/TRACE_MANIFEST.json` | `test_datasheet_hash_matches_data`, `test_model_card_matches_current_versions` |
+| RACI y traspaso entre roles | `student_inputs/raci.csv` (16 actividades, un único A en cada una) y `docs/HANDOFF.md` (T1–T5 con criterios y firmas) | `test_project_raci_*`, `test_strict_raci_*` |
+| Monitoreo, runbook y simulacro | `src/inf8239_u04/monitoring.py`, `incident.py`, `docs/RUNBOOK.md`, `reports/lab13/incident/` (manifiesto SHA-256) y `INCIDENT_POSTMORTEM.md` | `test_quality_contract_*`, `test_drill_*`, `test_unsupported_performance_never_returns_go` |
+| Pruebas, Git y calidad documental | 49 pruebas, `ruff`, etiqueta `u04-lab13` y `docs/AI_USE_DECLARATION.md` | `uv run pytest -q` |
+
+`docs/NORMATIVE_MATRIX.csv` distingue **obligación legal** (condicionada a datos reales o a la
+administración pública), **marco voluntario** y **recomendación ética** (N01–N20).
 
 ## Cambios respecto al proyecto base
-
-* **`scripts/lab11_impact.py`.** Se corrigió un `SyntaxError` del original. Además, ya no sobrescribe
-  el registro de decisión.
-* **Archivos nuevos.** `src/inf8239_u04/audit_extra.py`, `scripts/e07_audit.py` y
-  `tests/test_e07.py`.
-* **Dependencia añadida.** `matplotlib`, para la figura de brechas.
-
-El resto del proyecto base no se modificó. Las 10 pruebas del curso siguen en verde.
+* **`scripts/simulate_incident.py`.** Se corrigió un `SyntaxError` del original y ahora ejecuta el
+  simulacro completo.
+* **`scripts/lab13_governance.py`.** Valida el RACI en modo estricto y produce una decisión trazable.
+* **`governance.py`.** Añade STOP, `trace_manifest` y `governed_recommendation`, y mantiene la
+  compatibilidad con la prueba del curso.
+* **Archivos nuevos.** `monitoring.py`, `incident.py` y `tests/test_e08.py`.
+* **`app.py`.** Muestra la decisión gobernada, la trazabilidad y el simulacro.
 
 ## Uso de IA
-
-Se usó Claude (Anthropic). Ver [`docs/AI_USE_DECLARATION.md`](docs/AI_USE_DECLARATION.md). Los valores
-del análisis los decidió el estudiante, que responde por las referencias, la interpretación normativa,
-el código y las conclusiones.
+Se usó Claude (Anthropic). Ver [`docs/AI_USE_DECLARATION.md`](docs/AI_USE_DECLARATION.md). Esa
+declaración indica qué valores decidió el estudiante y cuáles propuso la IA para que el estudiante
+los validara. El estudiante responde por las referencias, la interpretación normativa, el código y
+las conclusiones.

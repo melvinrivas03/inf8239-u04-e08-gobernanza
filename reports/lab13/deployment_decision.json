@@ -1,0 +1,56 @@
+{
+  "metrics": {
+    "accuracy": 0.71875,
+    "recall": 0.717391304347826
+  },
+  "gaps": {
+    "recall_gap": 0.13763644992880875,
+    "fpr_gap": 0.125
+  },
+  "resources": {
+    "training_seconds": 0.020164319999935287,
+    "model_kb": 3.5634765625,
+    "latency_ms": 0.019683081249866063
+  },
+  "decision": {
+    "status": "GO",
+    "checks": {
+      "recall": true,
+      "recall_gap": true,
+      "fpr_gap": true,
+      "latency": true,
+      "model_size": true
+    },
+    "failed": [],
+    "human_action": "Revisar cada caso priorizado; el DSS no decide. Apelación en 5 días hábiles; muestra aleatoria del 5 % de casos de baja prioridad; monitoreo mensual (docs/RUNBOOK.md).",
+    "evidence": [
+      "reports/e07/gates.csv",
+      "reports/e07/bootstrap_gaps_baseline.csv",
+      "reports/lab13/fairness_by_group.csv",
+      "reports/lab13/INCIDENT_POSTMORTEM.md",
+      "docs/MODEL_CARD.md",
+      "docs/DATASHEET.md",
+      "docs/DATA_INVENTORY.csv"
+    ],
+    "trace": {
+      "system_name": "Territorial Review DSS - Synthetic",
+      "policy_version": "u04-e08-1.0",
+      "config_sha256": "b9f59e1a999eca2ca28212b1f9b6a3bbc01af104469608c9cd9315a0b462f3ea",
+      "data_sha256": "2af1858fe874f3914b0f9bfe068fd876cb716186694a6ece9a16e8c929128a01",
+      "model_sha256": "2b33ffa636a5e025b6931403dcadc8013b2ecf1d4e24b3e133b4c3580eae5f42",
+      "code_commit": "d2a226b",
+      "generated_utc": "2026-11-08T23:22:22+00:00"
+    },
+    "human_decision": {
+      "decision": "LIMITAR",
+      "by": "Institutional Owner (estudiante en el rol)",
+      "record": "student_inputs/lab12_decision.yml"
+    }
+  },
+  "governed_recommendation": {
+    "gate_status": "GO",
+    "policy_decision": "LIMITAR",
+    "final": "LIMITAR",
+    "authority": "El DSS sólo prioriza revisión; no declara emergencias, culpabilidad, elegibilidad ni interviene."
+  }
+}

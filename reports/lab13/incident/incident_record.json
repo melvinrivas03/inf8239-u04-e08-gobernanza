@@ -1,0 +1,138 @@
+{
+  "scenario": "ingesta v2 convierte historial ausente en 0 (zonas Sur y Norte, desde 2026-12-01)",
+  "clock": "simulado",
+  "detection": {
+    "severity": "SEV-1",
+    "status": "STOP",
+    "scope": [
+      "Norte"
+    ],
+    "reasons": [
+      "contrato de calidad violado (historial vacío) en zonas ['Norte']",
+      "PSI alto pero con n insuficiente (indicativo)"
+    ]
+  },
+  "confirmation": {
+    "severity": "SEV-1",
+    "status": "STOP",
+    "scope": [
+      "Norte",
+      "Sur"
+    ],
+    "reasons": [
+      "contrato de calidad violado (historial vacío) en zonas ['Norte', 'Sur']",
+      "PSI alto pero con n insuficiente (indicativo)",
+      "recall 0.483 < 0.68 [n=46 < 100: indicativo]",
+      "recall_gap 0.540 > 0.16 [n=46 < 100: indicativo]",
+      "ventana sin soporte suficiente: no puede declararse GO"
+    ]
+  },
+  "rollback_verification": {
+    "severity": "SEV-3",
+    "status": "REVIEW",
+    "scope": "sistema",
+    "reasons": [
+      "recall_gap 0.333 > 0.16 [n=46 < 100: indicativo]",
+      "fpr_gap 0.433 > 0.16 [n=46 < 100: indicativo]",
+      "ventana sin soporte suficiente: no puede declararse GO"
+    ]
+  },
+  "contract_ok": true,
+  "affected_cases": 23,
+  "affected_G1_share": 0.782608695652174,
+  "model_sha256_before": "2b33ffa636a5e025b6931403dcadc8013b2ecf1d4e24b3e133b4c3580eae5f42",
+  "model_sha256_after": "2b33ffa636a5e025b6931403dcadc8013b2ecf1d4e24b3e133b4c3580eae5f42",
+  "model_unchanged": true,
+  "performance": {
+    "december_defective": {
+      "n": 46,
+      "recall": 0.4827586206896552,
+      "recall_G1": 0.2777777777777778,
+      "recall_G2": 0.8181818181818182,
+      "recall_gap": 0.5404040404040404,
+      "fpr_gap": 0.11666666666666668,
+      "selection_rate": 0.34782608695652173
+    },
+    "december_rule_fallback": {
+      "n": 46,
+      "recall": 0.4827586206896552,
+      "recall_G1": 0.2777777777777778,
+      "recall_G2": 0.8181818181818182,
+      "recall_gap": 0.5404040404040404,
+      "fpr_gap": 0.04999999999999999,
+      "selection_rate": 0.391304347826087
+    },
+    "december_after_rollback": {
+      "n": 46,
+      "recall": 0.7931034482758621,
+      "recall_G1": 0.6666666666666666,
+      "recall_G2": 1.0,
+      "recall_gap": 0.33333333333333337,
+      "fpr_gap": 0.43333333333333335,
+      "selection_rate": 0.6086956521739131
+    }
+  },
+  "timeline": [
+    {
+      "t": "2026-12-01",
+      "fase": "cambio",
+      "evento": "Ingesta v2 activada en Sur y Norte (cambio no comunicado al equipo del modelo)"
+    },
+    {
+      "t": "2026-12-15",
+      "fase": "detección",
+      "evento": "Monitoreo quincenal sin etiquetas: SEV-1 → STOP",
+      "motivos": [
+        "contrato de calidad violado (historial vacío) en zonas ['Norte']",
+        "PSI alto pero con n insuficiente (indicativo)"
+      ]
+    },
+    {
+      "t": "2026-12-15",
+      "fase": "contención",
+      "evento": "STOP de segmento: el registro de cambios muestra que Norte y Sur comparten la ingesta v2, así que ambas salen del ranking (23 casos de diciembre); cola manual por orden de llegada. Este, Oeste siguen en REVIEW bajo LIMITAR"
+    },
+    {
+      "t": "2026-12-15",
+      "fase": "evidencia",
+      "evento": "Instantánea de reportes, hashes y versión de modelo/política"
+    },
+    {
+      "t": "2026-12-16",
+      "fase": "comunicación",
+      "evento": "Aviso interno al Institutional Owner y a Data Engineering; aviso a representantes afectados"
+    },
+    {
+      "t": "2026-12-18",
+      "fase": "rollback",
+      "evento": "Ingesta revertida a v1; re-puntuación del periodo; verificación de puertas",
+      "verificación": {
+        "severity": "SEV-3",
+        "status": "REVIEW",
+        "scope": "sistema",
+        "reasons": [
+          "recall_gap 0.333 > 0.16 [n=46 < 100: indicativo]",
+          "fpr_gap 0.433 > 0.16 [n=46 < 100: indicativo]",
+          "ventana sin soporte suficiente: no puede declararse GO"
+        ]
+      }
+    },
+    {
+      "t": "2027-01-10",
+      "fase": "confirmación con etiquetas",
+      "evento": "Ventana de diciembre etiquetada: SEV-1 → STOP",
+      "motivos": [
+        "contrato de calidad violado (historial vacío) en zonas ['Norte', 'Sur']",
+        "PSI alto pero con n insuficiente (indicativo)",
+        "recall 0.483 < 0.68 [n=46 < 100: indicativo]",
+        "recall_gap 0.540 > 0.16 [n=46 < 100: indicativo]",
+        "ventana sin soporte suficiente: no puede declararse GO"
+      ]
+    },
+    {
+      "t": "2027-01-14",
+      "fase": "postmortem",
+      "evento": "Revisión sin culpables y acciones correctivas con responsables"
+    }
+  ]
+}

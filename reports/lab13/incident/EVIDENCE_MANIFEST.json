@@ -1,0 +1,10 @@
+{
+  "evidence/december_scored_cases.csv": "d23f83818ac27fc5d6de6e36c09e19c6efb3819f828633b53ac7ef37e4111df3",
+  "evidence/drift_december.csv": "48ff1ca5f766f0bc4ce083dbeef32571f4066a4cdcaf18e1df750c0b1dbb685e",
+  "evidence/drift_first_batch.csv": "c5c8e7d6e694e379447bfbdca6d8c91b058f0fc495b2e189b3ac42d2ae97851b",
+  "evidence/performance.json": "ebfcf542f848d87e2390ac4ac739d13d6c443149fabd84b31a1ebc3a0eebf1ce",
+  "evidence/quality_december.csv": "3d0c35bf954947b0cc612b5d5743ee2a8c241c5b0fc72a5ada50bd536017d258",
+  "evidence/quality_first_batch.csv": "5b7aadda21500457f3a9e235e34bfc99e11e851189e40b8d9336357ce081c978",
+  "evidence/window_metrics.csv": "97beb3ce11067a7aa6a5b4743a5d59f0e7166c7d41fc297f22cab691cc0d30e7",
+  "incident_record.json": "2a92973e70dcbc5b7f32289b1ef741b288989bde3a5d1d8600e99a9075cb33b5"
+}

@@ -1,0 +1,6 @@
+feature,psi,n,nivel
+previous_incidents,0.7622,28,INDICATIVO
+infrastructure_score,0.2276,28,INDICATIVO
+exposure,0.4823,28,INDICATIVO
+zone,0.1047,28,INDICATIVO
+age_band,0.0899,28,INDICATIVO

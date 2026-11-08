@@ -1,0 +1,9 @@
+{
+  "system_name": "Territorial Review DSS - Synthetic",
+  "policy_version": "u04-e08-1.0",
+  "config_sha256": "b9f59e1a999eca2ca28212b1f9b6a3bbc01af104469608c9cd9315a0b462f3ea",
+  "data_sha256": "2af1858fe874f3914b0f9bfe068fd876cb716186694a6ece9a16e8c929128a01",
+  "model_sha256": "2b33ffa636a5e025b6931403dcadc8013b2ecf1d4e24b3e133b4c3580eae5f42",
+  "code_commit": "d2a226b",
+  "generated_utc": "2026-11-08T23:22:22+00:00"
+}
