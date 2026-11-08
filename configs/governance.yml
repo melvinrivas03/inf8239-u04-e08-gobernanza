@@ -12,3 +12,21 @@ gates:
   max_fpr_gap: 0.16
   max_latency_ms: 500
   max_model_kb: 1024
+
+# ---- U04.E08: versión de política, monitoreo y retención -------------------------------
+# Los valores marcados «decisión del estudiante» son juicios de valor, no resultados técnicos.
+policy_version: u04-e08-1.0
+human_policy_decision: LIMITAR        # decisión vigente de U04.E07 (decisión del estudiante)
+monitoring:
+  window: month
+  min_window_cases_for_fairness: 100  # regla de retiro de U04.E07
+  psi_review: 0.10                    # convención habitual de la industria (no normativa)
+  psi_alert: 0.25
+  zero_history_delta_alert: 0.15      # aumento máximo de historial vacío por zona
+  stop_factor: 2.0                    # brecha > 2 × tolerancia ⇒ STOP (decisión del estudiante)
+retention:                            # decisión del estudiante; ver docs/DATA_INVENTORY.csv
+  case_records_active_months: 12
+  case_records_blocked_months: 12     # Ley 172-13 art. 15: bloqueo antes de supresión
+  prediction_log_months: 24
+  protected_attribute_audit_months: 24
+  incident_evidence_months: 36
